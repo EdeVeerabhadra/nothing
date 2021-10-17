@@ -1,0 +1,33 @@
+https://pkg.jenkins.io/redhat-stable/jenkins-2.235.1-1.1.noarch.rpm
+
+
+
+https://pkg.jenkins.io/redhat-stable/jenkins-2.235.1-1.1.noarch.rpm
+
+
+---
+- hosts: webserver
+  gather_facts: false
+  become: true
+  tasks:
+  - name: install wget
+    yum:
+      name: wget
+      state: present
+  - name: install openjdk
+    yum:
+      name: java-1.8.0-openjdk
+      state: present
+  - name: download jenkins.repo
+    get_url:
+      url: https://pkg.jenkins.io/redhat/jenkins.repo
+      dest: /etc/yum.repos.d/jenkins.repo
+  - name: import jenkinskey
+    rpm_key:
+      state: present
+      key: https://jenkins-ci.org/redhat/jenkins-ci.org.key
+  - name: install jenkins
+    yum:
+      name: jenkins
+      state: present
+
